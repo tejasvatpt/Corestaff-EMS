@@ -15,9 +15,11 @@ import {
   deleteDepartment,
   updateDepartment,
 } from "../services/departmentApi";
+import { useAuth } from "@/features/auth";
 
 export default function DepartmentPage() {
   const { departments, loading, error, refetch } = useDepartments();
+  const { isAdmin } = useAuth();
 
   const [open, setOpen] = useState(false);
   const [selectedDepartment, setSelectedDepartment] = useState(null);
@@ -89,13 +91,15 @@ export default function DepartmentPage() {
           </p>
         </div>
 
-        <button
-          type="button"
-          onClick={handleAdd}
-          className="bg-black text-white px-5 py-3 rounded-2xl hover:bg-gray-800 transition"
-        >
-          + Add Department
-        </button>
+        {isAdmin && (
+          <button
+            type="button"
+            onClick={handleAdd}
+            className="bg-black text-white px-5 py-3 rounded-2xl hover:bg-gray-800 transition"
+          >
+            + Add Department
+          </button>
+        )}
       </div>
 
       {loading && (
@@ -118,6 +122,7 @@ export default function DepartmentPage() {
       {!loading && !error && departments.length > 0 && (
         <DepartmentTable
           departments={departments}
+          canManage={isAdmin}
           deletingDepartmentId={deletingDepartmentId}
           onEdit={handleEdit}
           onDelete={handleDelete}

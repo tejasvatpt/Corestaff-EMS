@@ -17,6 +17,13 @@ venv/
 # IDE
 .vscode/
 .idea/
+.claude/
+
+# Local credentials
+EMS.login.txt
+
+# Node
+node_modules/
 
 # Logs
 *.log

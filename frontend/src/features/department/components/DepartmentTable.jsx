@@ -15,6 +15,7 @@ export default function DepartmentTable({
   deletingDepartmentId,
   onEdit,
   onDelete,
+  canManage = false,
 }) {
   return (
     <div className="bg-white rounded-3xl border border-gray-200 overflow-hidden">
@@ -23,7 +24,9 @@ export default function DepartmentTable({
           <TableRow>
             <TableHead>Department</TableHead>
             <TableHead className="w-24">ID</TableHead>
-            <TableHead className="w-28 text-right">Actions</TableHead>
+            {canManage && (
+              <TableHead className="w-28 text-right">Actions</TableHead>
+            )}
           </TableRow>
         </TableHeader>
 
@@ -39,32 +42,34 @@ export default function DepartmentTable({
 
               <TableCell>{department.id}</TableCell>
 
-              <TableCell>
-                <div className="flex justify-end gap-2">
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon-sm"
-                    aria-label={`Edit ${department.name}`}
-                    title="Edit department"
-                    onClick={() => onEdit(department)}
-                  >
-                    <Pencil className="size-4" />
-                  </Button>
+              {canManage && (
+                <TableCell>
+                  <div className="flex justify-end gap-2">
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon-sm"
+                      aria-label={`Edit ${department.name}`}
+                      title="Edit department"
+                      onClick={() => onEdit(department)}
+                    >
+                      <Pencil className="size-4" />
+                    </Button>
 
-                  <Button
-                    type="button"
-                    variant="destructive"
-                    size="icon-sm"
-                    aria-label={`Delete ${department.name}`}
-                    title="Delete department"
-                    disabled={deletingDepartmentId === department.id}
-                    onClick={() => onDelete(department)}
-                  >
-                    <Trash2 className="size-4" />
-                  </Button>
-                </div>
-              </TableCell>
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      size="icon-sm"
+                      aria-label={`Delete ${department.name}`}
+                      title="Delete department"
+                      disabled={deletingDepartmentId === department.id}
+                      onClick={() => onDelete(department)}
+                    >
+                      <Trash2 className="size-4" />
+                    </Button>
+                  </div>
+                </TableCell>
+              )}
             </TableRow>
           ))}
         </TableBody>

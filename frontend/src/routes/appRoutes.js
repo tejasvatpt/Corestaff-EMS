@@ -9,6 +9,7 @@ import {
 
 import Dashboard from "@/features/dashboard/pages/Dashboard";
 import { EmployeePage } from "@/features/employee";
+import { DepartmentPage } from "@/features/department";
 
 export const appRoutes = [
   {
@@ -27,7 +28,7 @@ export const appRoutes = [
     title: "Departments",
     path: "/departments",
     icon: Building2,
-    element: null,
+    element: DepartmentPage,
   },
   {
     title: "Attendance",

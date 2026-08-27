@@ -1,21 +1,17 @@
-import axios from "axios";
-
-const API = axios.create({
-  baseURL: "http://127.0.0.1:8000",
-});
+import api from "@/lib/api";
 
 export const getDepartments = async () => {
-  const response = await API.get("/departments");
+  const response = await api.get("/departments");
   return response.data;
 };
 
 export const createDepartment = async (department) => {
-  const response = await API.post("/departments", department);
+  const response = await api.post("/departments", department);
   return response.data;
 };
 
 export const updateDepartment = async (departmentId, department) => {
-  const response = await API.put(
+  const response = await api.put(
     `/departments/${departmentId}`,
     department
   );
@@ -23,6 +19,6 @@ export const updateDepartment = async (departmentId, department) => {
 };
 
 export const deleteDepartment = async (departmentId) => {
-  const response = await API.delete(`/departments/${departmentId}`);
+  const response = await api.delete(`/departments/${departmentId}`);
   return response.data;
 };

@@ -1,7 +1,11 @@
 from datetime import date
+from typing import Literal
 
 # from h11 import Data
 from pydantic import BaseModel, ConfigDict, EmailStr ,Field
+
+
+UserRole = Literal["employee", "admin"]
 
 
 class DepartmentBase(BaseModel):
@@ -28,6 +32,7 @@ class UserCreate(BaseModel):        #Data received from the user (request body).
     username: str
     email: EmailStr
     password: str = Field(min_length=8)
+    role: UserRole = "employee"     #Only an admin can create users, so it may set this.
 
 
 class UserResponse(BaseModel):          #Data sent back to the user (response body).
@@ -42,6 +47,11 @@ class UserResponse(BaseModel):          #Data sent back to the user (response bo
 class UserLogin(BaseModel):
     email:EmailStr
     password:str
+
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
 
 
 class EmployeeCreate(BaseModel):

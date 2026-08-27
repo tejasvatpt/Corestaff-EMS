@@ -14,6 +14,7 @@ export default function EmployeeTable({
   onEdit,
   onDelete,
   deletingEmployeeId,
+  canManage = false,
 }) {
   return (
     <div className="bg-white rounded-3xl border border-gray-200 overflow-hidden">
@@ -25,7 +26,9 @@ export default function EmployeeTable({
             <TableHead>Phone</TableHead>
             <TableHead>Joining Date</TableHead>
             <TableHead>Status</TableHead>
-            <TableHead className="w-28 text-right">Actions</TableHead>
+            {canManage && (
+              <TableHead className="w-28 text-right">Actions</TableHead>
+            )}
           </TableRow>
         </TableHeader>
 
@@ -62,32 +65,34 @@ export default function EmployeeTable({
                 </span>
               </TableCell>
 
-              <TableCell>
-                <div className="flex justify-end gap-2">
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon-sm"
-                    aria-label={`Edit ${employee.full_name}`}
-                    title="Edit employee"
-                    onClick={() => onEdit?.(employee)}
-                  >
-                    <Pencil className="size-4" />
-                  </Button>
+              {canManage && (
+                <TableCell>
+                  <div className="flex justify-end gap-2">
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon-sm"
+                      aria-label={`Edit ${employee.full_name}`}
+                      title="Edit employee"
+                      onClick={() => onEdit?.(employee)}
+                    >
+                      <Pencil className="size-4" />
+                    </Button>
 
-                  <Button
-                    type="button"
-                    variant="destructive"
-                    size="icon-sm"
-                    aria-label={`Delete ${employee.full_name}`}
-                    title="Delete employee"
-                    disabled={deletingEmployeeId === employee.id}
-                    onClick={() => onDelete?.(employee)}
-                  >
-                    <Trash2 className="size-4" />
-                  </Button>
-                </div>
-              </TableCell>
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      size="icon-sm"
+                      aria-label={`Delete ${employee.full_name}`}
+                      title="Delete employee"
+                      disabled={deletingEmployeeId === employee.id}
+                      onClick={() => onDelete?.(employee)}
+                    >
+                      <Trash2 className="size-4" />
+                    </Button>
+                  </div>
+                </TableCell>
+              )}
             </TableRow>
           ))}
         </TableBody>

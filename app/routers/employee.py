@@ -2,8 +2,9 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from ..database import get_db
-from ..models import Employee
+from ..models import Employee, User
 from ..schemas import EmployeeCreate, EmployeeResponse, EmployeeUpdate
+from ..auth import get_current_user, admin_required
 
 
 router = APIRouter(
@@ -12,15 +13,19 @@ router = APIRouter(
 )
 
 
-@router.get("/", response_model=list[EmployeeResponse])
-def get_employees(db: Session = Depends(get_db)):
+@router.get("", response_model=list[EmployeeResponse])
+def get_employees(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
     return db.query(Employee).all()
 
 
 @router.get("/{employee_id}", response_model=EmployeeResponse)
 def get_employee(
     employee_id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
 ):
     employee = (
         db.query(Employee)
@@ -37,10 +42,11 @@ def get_employee(
     return employee
 
 
-@router.post("/", response_model=EmployeeResponse)
+@router.post("", response_model=EmployeeResponse)
 def create_employee(
     employee: EmployeeCreate,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(admin_required)
 ):
     new_employee = Employee(
         user_id=employee.user_id,
@@ -63,7 +69,8 @@ def create_employee(
 def update_employee(
     employee_id: int,
     employee_data: EmployeeUpdate,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(admin_required)
 ):
     employee = db.query(Employee).filter(
         Employee.id == employee_id
@@ -87,7 +94,8 @@ def update_employee(
 @router.delete("/{employee_id}")
 def delete_employee(
     employee_id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(admin_required)
 ):
     employee = db.query(Employee).filter(
         Employee.id == employee_id

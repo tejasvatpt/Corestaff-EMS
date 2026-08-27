@@ -11,9 +11,11 @@ import EmployeeTable from "../components/EmployeeTable";
 import EmployeeForm from "../components/EmployeeForm";
 import { useEmployees } from "../hooks/useEmployees";
 import { deleteEmployee } from "../services/employeeApi";
+import { useAuth } from "@/features/auth";
 
 export default function EmployeePage() {
   const { employees, loading, error, refetch } = useEmployees();
+  const { isAdmin } = useAuth();
 
  const [open, setOpen] = useState(false);
 const [selectedEmployee, setSelectedEmployee] = useState(null);
@@ -53,15 +55,17 @@ const handleDelete = async (employee) => {
           </p>
         </div>
 
-        <button
-          onClick={() => {
-  setSelectedEmployee(null);
-  setOpen(true);
-}}
-          className="bg-black text-white px-5 py-3 rounded-2xl hover:bg-gray-800 transition"
-        >
-          + Add Employee
-        </button>
+        {isAdmin && (
+          <button
+            onClick={() => {
+              setSelectedEmployee(null);
+              setOpen(true);
+            }}
+            className="bg-black text-white px-5 py-3 rounded-2xl hover:bg-gray-800 transition"
+          >
+            + Add Employee
+          </button>
+        )}
       </div>
 
       {loading && (
@@ -75,6 +79,7 @@ const handleDelete = async (employee) => {
       {!loading && !error && (
         <EmployeeTable
   employees={employees}
+  canManage={isAdmin}
   onEdit={(employee) => {
     setSelectedEmployee(employee);
     setOpen(true);

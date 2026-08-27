@@ -1,19 +1,19 @@
 from fastapi import APIRouter, Depends, HTTPException 
 from sqlalchemy.orm import Session 
 
-from database import get_db 
-from models import Department 
-from schemas import (
-    DepartmentCreate,
-    DepartmentResponse,
-    DepartmentUpdate
-)
+from ..database import get_db
+from ..models import Department
+from ..schemas import DepartmentCreate, DepartmentResponse, DepartmentUpdate
 
 router = APIRouter(prefix="/departments", tags=["Departments"])
 
 
 @router.post("", response_model=DepartmentResponse)
-def create_department(department: DepartmentCreate, db: Session = Depends(get_db)):
+def create_department(
+    department: DepartmentCreate,
+    db: Session = Depends(get_db)
+):    
+
     new_department = Department(name=department.name)
     db.add(new_department)
     db.commit()
@@ -31,7 +31,7 @@ def get_departments(db: Session = Depends(get_db)):
 def update_department(
     department_id: int,
     department: DepartmentUpdate,
-    db: Session = Depends(get_db),
+    db: Session = Depends(get_db)
 ):
     db_department = db.query(Department).filter(Department.id == department_id).first()
 
@@ -50,7 +50,7 @@ def update_department(
 
 
 
-@router.delete("/departments/{department_id}")
+@router.delete("/{department_id}")
 def delete_department(
     department_id: int,
     db: Session = Depends(get_db)

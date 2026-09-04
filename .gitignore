@@ -19,8 +19,17 @@ venv/
 .idea/
 .claude/
 
-# Local credentials
+# Local credentials and spreadsheets
 EMS.login.txt
+*.xlsx
+*.xls
+*.csv
+~$*
+
+# Agent / Prompt configs
+AGENTS*
+CLAUDE*
+GEMINI*
 
 # Node
 node_modules/

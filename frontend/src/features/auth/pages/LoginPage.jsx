@@ -15,12 +15,12 @@ export default function LoginPage() {
   const [error, setError] = useState(null);
   const [submitting, setSubmitting] = useState(false);
 
-  // Where to land after login: the page the user was bounced from, or "/".
-  const from = location.state?.from?.pathname || "/";
+  const from = location.state?.from?.pathname;
 
   // Already logged in (e.g. navigated here manually)? Skip the form.
   if (!loading && isAuthenticated) {
-    return <Navigate to={from} replace />;
+    const target = from || (user?.role === "admin" ? "/" : "/home");
+    return <Navigate to={target} replace />;
   }
 
   const handleChange = (e) => {
@@ -33,8 +33,9 @@ export default function LoginPage() {
     setSubmitting(true);
 
     try {
-      await login(form.email, form.password);
-      navigate(from, { replace: true });
+      const loggedUser = await login(form.email, form.password);
+      const target = from || (loggedUser?.role === "admin" ? "/" : "/home");
+      navigate(target, { replace: true });
     } catch (err) {
       const status = err.response?.status;
       setError(

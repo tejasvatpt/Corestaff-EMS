@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 
 from ..database import get_db
 from ..models import User
-from ..schemas import UserCreate, UserResponse, UserLogin, Token
+from ..schemas import UserCreate, UserResponse, UserLogin, Token, ChangePasswordRequest
 from ..utils import hash_password, verify_password
 from ..auth import create_access_token, get_current_user, admin_required
 
@@ -72,7 +72,9 @@ def login_user(user: UserLogin, db: Session = Depends(get_db)):
 
     return {
         "access_token": access_token,
-        "token_type": "bearer"
+        "token_type": "bearer",
+        "role": existing_user.role,
+        "username": existing_user.username,
     }
 
 @router.post("/token", response_model=Token)
@@ -107,8 +109,25 @@ def login_for_swagger(
 
     return {
         "access_token": access_token,
-        "token_type": "bearer"
+        "token_type": "bearer",
+        "role": existing_user.role,
+        "username": existing_user.username,
     }
+
+@router.post("/change-password")
+def change_password(
+    data: ChangePasswordRequest,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    if not verify_password(data.current_password, current_user.password_hash):
+        raise HTTPException(
+            status_code=400,
+            detail="Current password is incorrect"
+        )
+    current_user.password_hash = hash_password(data.new_password)
+    db.commit()
+    return {"message": "Password changed successfully"}
 
 #Must stay above any "/{user_id}" route, or FastAPI reads "me" as the id.
 @router.get("/me", response_model=UserResponse)

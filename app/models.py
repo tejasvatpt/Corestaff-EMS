@@ -52,6 +52,8 @@ class Attendance(Base):
     check_in = Column(DateTime)
     check_out = Column(DateTime)
     status = Column(String)
+    punch_in_photo = Column(String, nullable=True)
+    punch_out_photo = Column(String, nullable=True)
 
     employee = relationship("Employee", back_populates="attendance")
 
@@ -65,7 +67,10 @@ class Leave(Base):
     from_date = Column(Date)
     to_date = Column(Date)
     reason = Column(String)
-    status = Column(String)
+    status = Column(String)  # pending, approved, rejected
+    leave_type = Column(String, default="annual")  # annual, sick, casual, unpaid
+    applied_on = Column(Date, nullable=True)
+    admin_comment = Column(String, nullable=True)
 
     employee = relationship("Employee", back_populates="leaves")
     

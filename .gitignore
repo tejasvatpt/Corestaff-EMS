@@ -17,7 +17,7 @@ venv/
 # IDE
 .vscode/
 .idea/
-.claude/
+
 
 # Local credentials and spreadsheets
 EMS.login.txt

@@ -11,6 +11,16 @@ export const createEmployee = async (employee) => {
 };
 
 
+export const onboardEmployee = async (employeeData) => {
+  const response = await api.post("/employees/onboard", employeeData);
+  return response.data;
+};
+
+export const getMyEmployeeProfile = async () => {
+  const response = await api.get("/employees/me");
+  return response.data;
+};
+
 export const updateEmployee = async (employeeId, employeeData) => {
   const response = await api.put(
     `/employees/${employeeId}`,

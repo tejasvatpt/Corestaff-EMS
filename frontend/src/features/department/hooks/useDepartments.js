@@ -13,8 +13,6 @@ export function useDepartments() {
 
       const data = await getDepartments();
 
-      console.log("Departments received:", data);
-
       setDepartments(data);
     } catch (err) {
       console.error("Department API error:", err);
@@ -25,8 +23,30 @@ export function useDepartments() {
   }, []);
 
   useEffect(() => {
-    loadDepartments();
-  }, [loadDepartments]);
+    let isCurrent = true;
+
+    getDepartments()
+      .then((data) => {
+        if (isCurrent) {
+          setDepartments(data);
+        }
+      })
+      .catch((err) => {
+        if (isCurrent) {
+          console.error("Department API error:", err);
+          setError("Failed to load departments.");
+        }
+      })
+      .finally(() => {
+        if (isCurrent) {
+          setLoading(false);
+        }
+      });
+
+    return () => {
+      isCurrent = false;
+    };
+  }, []);
 
   return {
     departments,

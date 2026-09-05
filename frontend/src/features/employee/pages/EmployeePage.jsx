@@ -43,15 +43,15 @@ const handleDelete = async (employee) => {
 };
 
   return (
-    <div>
-      <div className="flex justify-between items-center mb-8">
+    <div className="space-y-8">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-4xl font-semibold">
+          <h1 className="text-3xl font-semibold tracking-tight text-[#1D1D1F]">
             Employees
           </h1>
 
-          <p className="text-gray-500 mt-2">
-            Manage all employees from one place.
+          <p className="text-sm text-[#86868B] mt-1">
+            Manage your organization's directory and onboard team members.
           </p>
         </div>
 
@@ -61,9 +61,9 @@ const handleDelete = async (employee) => {
               setSelectedEmployee(null);
               setOpen(true);
             }}
-            className="bg-black text-white px-5 py-3 rounded-2xl hover:bg-gray-800 transition"
+            className="bg-[#1D1D1F] hover:bg-[#424245] text-white px-5 py-2.5 rounded-full text-sm font-medium transition-all shadow-sm"
           >
-            + Add Employee
+            + Onboard Employee
           </button>
         )}
       </div>
